@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smart Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ea;--ink:#14213d;--card:#fffdf7;--line:#d9d2bd;--accent:#f2a900;--accent-ink:#14213d;--free:#1f8a5b;--mute:#5b6478;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1830;--ink:#f3efe2;--card:#17244a;--line:#2d3d6b;--mute:#a4aec7;--free:#4fd09a}}
+:root[data-theme="dark"]{--bg:#0f1830;--ink:#f3efe2;--card:#17244a;--line:#2d3d6b;--mute:#a4aec7;--free:#4fd09a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:20px 16px 60px}
+h1,h2,h3{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;margin:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0 24px}
+.logo{font-size:30px;font-weight:800;letter-spacing:-.5px}
+.logo span{background:var(--accent);color:var(--accent-ink);padding:0 8px;border-radius:6px;margin-left:4px}
+.badge{font-size:13px;border:1.5px solid var(--line);border-radius:99px;padding:6px 12px;background:var(--card);cursor:pointer;color:var(--ink)}
+.hero{font-size:clamp(30px,6vw,52px);font-weight:800;line-height:1.05;max-width:16ch;margin-bottom:10px}
+.sub{color:var(--mute);max-width:52ch;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.tile{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:18px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;box-shadow:5px 5px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+.tile:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.tile:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tile h3{font-size:21px;margin:8px 0 4px}
+.tile p{margin:0;color:var(--mute);font-size:14px}
+.ico{font-size:30px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;margin-top:10px}
+.free{background:var(--free);color:#fff}.lock{background:var(--accent);color:var(--accent-ink)}
+.tile.ncert{background:var(--accent);border-color:var(--ink)}
+.tile.ncert p{color:var(--accent-ink)}
+.tile.ncert .free{background:var(--ink);color:var(--bg)}
+.back{background:none;border:none;color:var(--ink);font:inherit;font-weight:700;cursor:pointer;padding:6px 0;margin-bottom:10px}
+.panel{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:18px}
+.panel h2{font-size:28px;margin-bottom:6px}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 4px}
+input,textarea,select{width:100%;font:inherit;padding:10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+.btn{font:inherit;font-weight:700;background:var(--accent);color:var(--accent-ink);border:2px solid var(--ink);border-radius:10px;padding:10px 16px;cursor:pointer;margin-top:12px}
+.btn.alt{background:var(--card);color:var(--ink)}
+.out{white-space:pre-wrap;margin-top:14px;padding:14px;border-left:5px solid var(--accent);background:var(--bg);border-radius:6px;min-height:0}
+.out:empty{display:none}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.tab{font:inherit;font-weight:700;padding:9px 16px;border:2px solid var(--ink);border-radius:99px;background:var(--card);color:var(--ink);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.note{border:2px solid var(--line);border-radius:10px;padding:10px;margin-top:10px;background:var(--bg)}
+.note b{display:block}
+.note button{float:right;background:none;border:none;color:var(--mute);cursor:pointer;font:inherit}
+canvas{width:100%;height:340px;background:#fff;border:2px solid var(--ink);border-radius:10px;touch-action:none;display:block}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.sw{width:30px;height:30px;border-radius:50%;border:3px solid var(--card);outline:2px solid var(--line);cursor:pointer;padding:0}
+.links a{display:block;padding:12px;border:2px solid var(--line);border-radius:10px;margin-top:8px;color:var(--ink);text-decoration:none;font-weight:700;background:var(--bg)}
+.links a:hover{border-color:var(--ink)}
+dialog{border:2px solid var(--ink);border-radius:16px;background:var(--card);color:var(--ink);max-width:720px;width:calc(100% - 24px);padding:20px}
+dialog::backdrop{background:rgba(10,15,30,.65)}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:14px 0}
+.plan{border:2px solid var(--ink);border-radius:12px;padding:14px;text-align:center;background:var(--bg);cursor:pointer;font:inherit;color:var(--ink)}
+.plan[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.plan strong{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:19px}
+.plan .p{font-size:26px;font-weight:800;display:block;margin:4px 0}
+.plan small{display:block;opacity:.8}
+.pay{display:none;border-top:2px dashed var(--line);padding-top:12px}
+.upi{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-weight:700}
+.upi code{background:var(--bg);padding:6px 10px;border-radius:8px;border:2px solid var(--line)}
+.fine{font-size:13px;color:var(--mute)}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">Smart<span>Works</span></div>
+  <button class="badge" id="planBadge">Free plan · Upgrade</button>
+</header>
+
+<main id="home">
+  <h1 class="hero">Study smarter, finish faster.</h1>
+  <p class="sub">Upload homework, keep notes, draw out ideas, plan your career and learn from NCERT, all in one place.</p>
+  <div class="grid" id="tiles"></div>
+</main>
+
+<main id="view" hidden></main>
+</div>
+
+<dialog id="dlg">
+  <h2 style="font-size:26px">Upgrade to unlock everything</h2>
+  <p class="fine" style="margin:6px 0 0">NCERT is always free. Pick a plan to open Homework, Notes, Drawing and Career Counsel.</p>
+  <div class="plans" id="plans"></div>
+  <div class="pay" id="pay"><p style="margin:0 0 8px"><b id="payAmt"></b></p><button class="btn" id="payNow">Pay securely (UPI, cards, netbanking)</button><p class="fine" id="payMsg" role="status"></p></div>
+  <label for="code">Have an access code?</label><input id="code" placeholder="Enter code"><button class="btn alt" id="useCode">Apply code</button> <span class="fine" id="codeMsg" role="status"></span><br><button class="btn alt" id="closeDlg">Close</button>
+</dialog>
+
+<script>
+var UPI="9973074536@fam";
+var PLANS=[{id:"standard",name:"Standard",price:50,months:1,label:"1 month"},{id:"gold",name:"Gold",price:200,months:6,label:"6 months"},{id:"diamond",name:"Diamond",price:2000,months:12,label:"1 year"}];
+var SECTIONS=[
+ {id:"homework",icon:"📝",name:"Homework",desc:"Upload your work and get a step-by-step solution.",paid:true},
+ {id:"notes",icon:"📒",name:"Notes",desc:"Write, save and revisit your own notes.",paid:true},
+ {id:"drawing",icon:"🎨",name:"Drawing",desc:"A sketchpad for diagrams and ideas.",paid:true},
+ {id:"career",icon:"🧭",name:"Career Counsel",desc:"Find streams and careers that fit you.",paid:true},
+ {id:"ncert",icon:"📚",name:"NCERT",desc:"Notes, books, solutions and media. Free for everyone.",paid:false}
+];
+var $=function(s){return document.querySelector(s)};
+var selPlan=null;
+
+function store(k,v){try{if(v===undefined){var r=localStorage.getItem(k);return r?JSON.parse(r):null}localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+var OWNER=false;
+function activePlan(){if(OWNER)return {name:"Diamond",until:Date.now()+3.15e10};var p=store("sw_plan");if(p&&p.until>Date.now())return p;return null}
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+
+function refreshBadge(){var p=activePlan();$("#planBadge").textContent=p?(p.name+" plan · until "+new Date(p.until).toLocaleDateString()):"Free plan · Upgrade"}
+
+function renderTiles(){
+ $("#tiles").innerHTML=SECTIONS.map(function(s){
+  return '<button class="tile'+(s.id==="ncert"?' ncert':'')+'" data-id="'+s.id+'"><span class="ico">'+s.icon+'</span><h3>'+s.name+'</h3><p>'+s.desc+'</p><span class="tag '+(s.paid?'lock">Upgrade to use':'free">Free')+'</span></button>'}).join("");
+ document.querySelectorAll(".tile").forEach(function(t){t.onclick=function(){openSection(t.dataset.id)}});
+}
+
+function openSection(id){
+ var s=SECTIONS.filter(function(x){return x.id===id})[0];
+ if(s.paid&&!activePlan()){openDlg();return}
+ CUR=id;$("#home").hidden=true;var v=$("#view");v.hidden=false;
+ v.innerHTML='<button class="back" id="back">← Back to Smart Works</button><div class="panel" id="body"></div>';
+ $("#back").onclick=goHome;
+ ({homework:homework,notes:notes,drawing:drawing,career:career,ncert:ncert})[id]($("#body"));
+ window.scrollTo(0,0);
+}
+function goHome(){$("#view").hidden=true;$("#home").hidden=false;$("#view").innerHTML=""}
+
+var CUR="";
+function b64(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result.split(",")[1])};r.onerror=rej;r.readAsDataURL(f)})}
+async function ask(prompt,out,imgs){
+ out.textContent="Thinking…";
+ try{
+  var p=store("sw_plan"),body={kind:CUR,prompt:prompt,token:p&&p.token};
+  if(imgs&&imgs[0]){body.image={media_type:imgs[0].type||"image/jpeg",data:await b64(imgs[0])}}
+  var r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  var j=await r.json();
+  out.textContent=r.ok?j.text:(j.error||"Something went wrong. Please try again.");
+ }catch(e){out.textContent="Could not reach the server. Check your internet and try again."}
+}
+
+/* Homework */
+function homework(b){
+ b.innerHTML='<h2>Homework solver</h2><p class="fine">Upload a photo of your homework or type the question. You get the answer with steps.</p>'+
+ '<label for="hsub">Subject</label><select id="hsub"><option>Maths</option><option>Science</option><option>English</option><option>Social Science</option><option>Hindi</option><option>Other</option></select>'+
+ '<label for="hfile">Upload photo of your work</label><input type="file" id="hfile" accept="image/*">'+
+ '<label for="htxt">Or type the question</label><textarea id="htxt"></textarea>'+
+ '<button class="btn" id="hgo">Get solution</button><div class="out" id="hout" aria-live="polite"></div>';
+ $("#hgo").onclick=function(){
+  var f=$("#hfile").files[0],q=$("#htxt").value.trim();
+  if(!f&&!q){$("#hout").textContent="Upload a photo or type a question first.";return}
+  ask("You are a patient school teacher. Subject: "+$("#hsub").value+". Solve this homework step by step in simple language, then give the final answer clearly. "+(q?"Question: "+q:"The question is in the attached image."),$("#hout"),f?[f]:null);
+ };
+}
+
+/* Notes */
+function notes(b){
+ b.innerHTML='<h2>My notes</h2><label for="nt">Title</label><input id="nt"><label for="nb">Note</label><textarea id="nb"></textarea><button class="btn" id="ns">Save note</button><div id="nl"></div>';
+ function draw(){var l=store("sw_notes")||[];$("#nl").innerHTML=l.length?l.map(function(n,i){return '<div class="note"><button data-i="'+i+'" aria-label="Delete note">Delete</button><b>'+esc(n.t||"Untitled")+'</b>'+esc(n.b)+'</div>'}).join(""):'<p class="fine">No notes yet. Write your first one above.</p>';
+  document.querySelectorAll("#nl button").forEach(function(x){x.onclick=function(){l.splice(+x.dataset.i,1);store("sw_notes",l);draw()}})}
+ $("#ns").onclick=function(){var t=$("#nt").value.trim(),n=$("#nb").value.trim();if(!n)return;var l=store("sw_notes")||[];l.unshift({t:t,b:n});store("sw_notes",l);$("#nt").value="";$("#nb").value="";draw()};
+ draw();
+}
+
+/* Drawing */
+function drawing(b){
+ b.innerHTML='<h2>Sketchpad</h2><div class="tools" id="tl"></div><canvas id="cv" aria-label="Drawing area"></canvas>';
+ var cols=["#14213d","#d62828","#1f8a5b","#2563eb","#f2a900"],col=cols[0],size=4,erase=false;
+ $("#tl").innerHTML=cols.map(function(c){return '<button class="sw" style="background:'+c+'" data-c="'+c+'" aria-label="Colour '+c+'"></button>'}).join("")+
+ '<label for="sz" style="margin:0">Size</label><input type="range" id="sz" min="1" max="24" value="4" style="width:110px"><button class="btn alt" id="er" style="margin:0">Eraser</button><button class="btn alt" id="cl" style="margin:0">Clear</button>';
+ var cv=$("#cv"),ctx;function fit(){var r=cv.getBoundingClientRect();cv.width=r.width*2;cv.height=r.height*2;ctx=cv.getContext("2d");ctx.scale(2,2);ctx.lineCap="round";ctx.lineJoin="round"}
+ fit();var on=false;
+ function pos(e){var r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+ cv.onpointerdown=function(e){on=true;cv.setPointerCapture(e.pointerId);var p=pos(e);ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(p[0]+.1,p[1])};
+ cv.onpointermove=function(e){if(!on)return;var p=pos(e);ctx.strokeStyle=erase?"#fff":col;ctx.lineWidth=erase?size*3:size;ctx.lineTo(p[0],p[1]);ctx.stroke()};
+ cv.onpointerup=cv.onpointercancel=function(){on=false};
+ document.querySelectorAll(".sw").forEach(function(s){s.onclick=function(){col=s.dataset.c;erase=false}});
+ $("#sz").oninput=function(){size=+this.value};$("#er").onclick=function(){erase=true};
+ $("#cl").onclick=function(){ctx.clearRect(0,0,cv.width,cv.height)};
+}
+
+/* Career */
+function career(b){
+ b.innerHTML='<h2>Career counsel</h2><p class="fine">Tell us about yourself and get guidance on streams, courses, entrance exams and careers.</p>'+
+ '<div class="row"><div><label for="cc">Your class</label><select id="cc"><option>Class 8</option><option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option><option>College</option></select></div>'+
+ '<div><label for="cs">Favourite subjects</label><input id="cs" placeholder="e.g. Maths, Biology"></div></div>'+
+ '<label for="ci">Interests and goals</label><textarea id="ci" placeholder="What do you enjoy? What do you want to become?"></textarea>'+
+ '<button class="btn" id="cg">Get guidance</button><div class="out" id="cout" aria-live="polite"></div>';
+ $("#cg").onclick=function(){ask("You are a caring career counsellor for Indian students. Student: "+$("#cc").value+". Favourite subjects: "+($("#cs").value||"not given")+". Interests and goals: "+($("#ci").value||"not given")+". Suggest 3 to 4 suitable career paths. For each give the stream or course to choose, key entrance exams in India, and the next 3 steps. Keep it simple and encouraging.",$("#cout"))};
+}
+
+/* NCERT */
+function ncert(b){
+ b.innerHTML='<h2>NCERT</h2><p class="fine">Free for everyone.</p><div class="row"><div><label for="nc">Class</label><select id="nc">'+[6,7,8,9,10,11,12].map(function(c){return '<option>'+c+'</option>'}).join("")+'</select></div>'+
+ '<div><label for="ns2">Subject</label><select id="ns2"><option>Maths</option><option>Science</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>English</option><option>History</option><option>Geography</option><option>Civics</option><option>Hindi</option></select></div></div>'+
+ '<div class="tabs" role="tablist" id="tb"></div><div id="tp"></div>';
+ var T=["Notes","Books","Solution","Media"],cur="Notes";
+ function sel(){return {c:$("#nc").value,s:$("#ns2").value}}
+ function tabs(){$("#tb").innerHTML=T.map(function(t){return '<button class="tab" role="tab" aria-selected="'+(t===cur)+'" data-t="'+t+'">'+t+'</button>'}).join("");
+  document.querySelectorAll(".tab").forEach(function(x){x.onclick=function(){cur=x.dataset.t;tabs();pane()}})}
+ function pane(){var p=$("#tp"),v=sel();
+  if(cur==="Notes"){p.innerHTML='<label for="ch">Chapter name or number</label><input id="ch" placeholder="e.g. Chapter 3, Motion"><button class="btn" id="go">Make notes</button><div class="out" id="o" aria-live="polite"></div>';
+   $("#go").onclick=function(){var c=$("#ch").value.trim();if(!c){$("#o").textContent="Enter a chapter first.";return}ask("Write clear exam-ready revision notes for NCERT Class "+v.c+" "+v.s+", "+c+". Use short headings, key definitions, formulas or dates, and a 5-point quick recap.",$("#o"))}}
+  else if(cur==="Books"){p.innerHTML='<div class="links"><a href="https://ncert.nic.in/textbook.php" target="_blank" rel="noopener">Open the official NCERT textbooks (Class '+v.c+', '+v.s+') ↗</a><a href="https://ncert.nic.in/textbook.php" target="_blank" rel="noopener">Download chapter PDFs from ncert.nic.in ↗</a></div><p class="fine">On the NCERT site, choose Class '+v.c+', then '+v.s+', then download or read the book.</p>'}
+  else if(cur==="Solution"){p.innerHTML='<label for="q">Paste the NCERT question</label><textarea id="q"></textarea><button class="btn" id="go">Get solution</button><div class="out" id="o" aria-live="polite"></div>';
+   $("#go").onclick=function(){var q=$("#q").value.trim();if(!q){$("#o").textContent="Paste a question first.";return}ask("Answer this NCERT Class "+v.c+" "+v.s+" question step by step in simple language, suitable for board exams. Question: "+q,$("#o"))}}
+  else{var u=function(t){return "https://www.youtube.com/results?search_query="+encodeURIComponent("NCERT Class "+v.c+" "+v.s+" "+t)};
+   p.innerHTML='<div class="links"><a href="'+u("full chapter explanation")+'" target="_blank" rel="noopener">Video lessons ↗</a><a href="'+u("important questions")+'" target="_blank" rel="noopener">Important questions ↗</a><a href="'+u("revision one shot")+'" target="_blank" rel="noopener">Quick revision videos ↗</a></div>'}}
+ $("#nc").onchange=$("#ns2").onchange=pane;tabs();pane();
+}
+
+/* Plans and payment */
+function openDlg(){
+ selPlan=null;$("#pay").style.display="none";$("#payMsg").textContent="";
+ $("#plans").innerHTML=PLANS.map(function(p){return '<button class="plan" aria-pressed="false" data-id="'+p.id+'"><strong>'+p.name+'</strong><span class="p">₹'+p.price+'</span><small>'+p.label+'</small></button>'}).join("");
+ document.querySelectorAll(".plan").forEach(function(x){x.onclick=function(){
+  selPlan=PLANS.filter(function(p){return p.id===x.dataset.id})[0];
+  document.querySelectorAll(".plan").forEach(function(y){y.setAttribute("aria-pressed",y===x)});
+  $("#payAmt").textContent="Pay ₹"+selPlan.price+" for "+selPlan.name+" ("+selPlan.label+")";
+  $("#pay").style.display="block"}});
+ $("#dlg").showModal();
+}
+$("#planBadge").onclick=openDlg;
+$("#closeDlg").onclick=function(){$("#dlg").close()};
+function loadRz(){return new Promise(function(res,rej){if(window.Razorpay)return res();var t=document.createElement("script");t.src="https://checkout.razorpay.com/v1/checkout.js";t.onload=res;t.onerror=rej;document.head.appendChild(t)})}
+async function post(u,b){var r=await fetch(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});var j=await r.json();if(!r.ok)throw new Error(j.error||"Request failed");return j}
+$("#payNow").onclick=async function(){
+ var m=$("#payMsg");if(!selPlan){m.textContent="Choose a plan first.";return}
+ try{m.textContent="Opening payment…";await loadRz();var o=await post("/api/order",{plan:selPlan.id});
+  new Razorpay({key:o.keyId,order_id:o.orderId,amount:o.amount,currency:"INR",name:"Smart Works",description:selPlan.name+" plan ("+selPlan.label+")",
+   handler:async function(resp){try{var v=await post("/api/verify",resp);store("sw_plan",v);refreshBadge();$("#dlg").close()}catch(e){m.textContent="Payment received but activation failed: "+e.message+". Contact support with payment ID "+resp.razorpay_payment_id}},
+   theme:{color:"#f2a900"}}).open();m.textContent="";
+ }catch(e){m.textContent="Could not start payment: "+e.message}};
+$("#useCode").onclick=async function(){try{var v=await post("/api/code",{code:$("#code").value.trim()});store("sw_plan",v);refreshBadge();$("#dlg").close()}catch(e){$("#codeMsg").textContent="That code is not valid."}};
+renderTiles();refreshBadge();
+</script>
+</body>
+</html>
