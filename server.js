@@ -4,6 +4,8 @@ const Razorpay = require("razorpay");
 
 const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, TOKEN_SECRET, ANTHROPIC_API_KEY, OWNER_CODE } = process.env;
 const MODEL = process.env.MODEL || "claude-sonnet-5-5";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
 const PLANS = {
   standard: { name: "Standard", price: 50, months: 1 },
   gold: { name: "Gold", price: 200, months: 6 },
@@ -77,7 +79,7 @@ function limited(ip) {
   h.push(now); hits.set(ip, h); return h.length > 20;
 }
 app.post("/api/ask", async (req, res) => {
-  if (!ANTHROPIC_API_KEY) return res.status(503).json({ error: "AI is not set up yet." });
+  if (!ANTHROPIC_API_KEY && !GEMINI_API_KEY) return res.status(503).json({ error: "AI is not set up yet." });
   const { kind, prompt, token, image } = req.body;
   if (typeof prompt !== "string" || !prompt.trim() || prompt.length > 6000) return res.status(400).json({ error: "Invalid question" });
   let system = "You are Smart Works, a friendly study helper for Indian school students. Explain simply and step by step.";
@@ -93,15 +95,27 @@ app.post("/api/ask", async (req, res) => {
   }
   content.push({ type: "text", text: prompt });
   try {
+    if (GEMINI_API_KEY) {
+      const parts = content.map((c) => c.type === "image" ? { inlineData: { mimeType: c.source.media_type, data: c.source.data } } : { text: c.text });
+      const gr = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + GEMINI_MODEL + ":generateContent", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
+        body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: "user", parts }] }),
+      });
+      const gj = await gr.json();
+      if (!gr.ok) { console.error("Gemini error", JSON.stringify(gj).slice(0, 300)); return res.status(502).json({ error: "The AI is busy. Please try again." }); }
+      const text = ((gj.candidates && gj.candidates[0] && gj.candidates[0].content && gj.candidates[0].content.parts) || []).map((p) => p.text || "").join("\n");
+      return res.json({ text: text || "No answer came back. Please try again." });
+    }
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({ model: MODEL, max_tokens: 1500, system, messages: [{ role: "user", content }] }),
     });
     const j = await r.json();
-    if (!r.ok) return res.status(502).json({ error: "The AI is busy. Please try again." });
+    if (!r.ok) { console.error("Anthropic error", JSON.stringify(j).slice(0, 300)); return res.status(502).json({ error: "The AI is busy. Please try again." }); }
     res.json({ text: j.content.filter((c) => c.type === "text").map((c) => c.text).join("\n") });
-  } catch (e) { res.status(502).json({ error: "The AI is busy. Please try again." }); }
+  } catch (e) { console.error(e); res.status(502).json({ error: "The AI is busy. Please try again." }); }
 });
 
 app.listen(process.env.PORT || 3000, () => console.log("Smart Works running"));
